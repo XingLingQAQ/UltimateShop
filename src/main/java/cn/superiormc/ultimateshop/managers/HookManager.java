@@ -109,6 +109,9 @@ public class HookManager {
         if (CommonUtil.checkPluginLoad("Nexo")) {
             registerNewItemHook("Nexo", new ItemNexoHook());
         }
+        if (CommonUtil.checkPluginLoad("CraftEngine")) {
+            registerNewItemHook("CraftEngine", new ItemCraftEngineHook());
+        }
     }
 
     private void initProtectionHook() {

@@ -25,8 +25,6 @@ public class ObjectDisplayItem {
 
     private ObjectItem item;
 
-    private int amount;
-
     public ObjectDisplayItem(ConfigurationSection section, ConfigurationSection conditionSection, ObjectItem item) {
         if (section == null) {
             useFirstProduct = true;
@@ -49,7 +47,6 @@ public class ObjectDisplayItem {
             if (item != null && ConfigManager.configManager.getBoolean("display-item.auto-set-first-product")) {
                 ObjectSingleProduct singleProduct = item.getReward().getTargetProduct(player);
                 if (singleProduct == null) {
-                    amount = 1;
                     return ObjectDisplayItemStack.getAir();
                 }
                 double cost = singleProduct.getAmount(player, 0, true).doubleValue();
@@ -87,24 +84,20 @@ public class ObjectDisplayItem {
             }
         }
         if (addLoreDisplayItem == null) {
-            amount = 1;
             return ObjectDisplayItemStack.getAir();
         }
         if (usedSection == null) {
             usedSection = section;
         }
         ObjectDisplayItemStack displayItemStack = new ObjectDisplayItemStack(player, addLoreDisplayItem, usedSection, item);
-        if (amount == 0) {
-            amount = displayItemStack.getItemStack().getAmount();
-        }
         return displayItemStack;
     }
 
-    public int getAmountPlaceholder() {
-        if (!ConfigManager.configManager.getBoolean("display-item.calculate-amount") || amount == 0) {
+    public int getAmountPlaceholder(Player player) {
+        if (!ConfigManager.configManager.getBoolean("display-item.calculate-amount")) {
             return 1;
         }
-        return amount;
+        return getDisplayItem(player).getItemStack().getAmount();
     }
 
     public ObjectDisplayItemStack getDisplayItem(Player player, int multi) {

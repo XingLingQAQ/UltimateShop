@@ -877,6 +877,7 @@ public class BuildItem {
                 meta.setEnchantable(enchantable);
             }
 
+
             // Glider
             if (section.getString("glider") != null) {
                 meta.setGlider(section.getBoolean("glider"));

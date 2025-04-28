@@ -125,6 +125,9 @@ public class FormInfoGUI extends FormGUI {
                         false,
                         true,
                         menu.getSection().getInt("max-amount", 64));
+                if (ConfigManager.configManager.getBoolean("menu.bedrock.not-auto-close")) {
+                    ShopGUI.openGUI(player, item.getShopObject(), true, true);
+                }
             }
         });
         tempVal2.closedOrInvalidResultHandler(response -> removeOpenGUIStatus());

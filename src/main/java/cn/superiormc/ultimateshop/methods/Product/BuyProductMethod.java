@@ -177,8 +177,9 @@ public class BuyProductMethod {
         }
         // 扣钱
         tempVal5.takeThing(inventory, player, takeResult.getResultMap());
+        int calculateAmount = multi * tempVal2.getDisplayItemObject().getAmountPlaceholder(player);
         // 执行动作
-        tempVal2.getBuyAction().runAllActions(new ObjectThingRun(player, playerUseTimes, multi));
+        tempVal2.getBuyAction().runAllActions(new ObjectThingRun(player, playerUseTimes, calculateAmount));
         // limit+1
         if (tempVal9 != null) {
             if (ConfigManager.configManager.getBoolean("debug")) {
@@ -209,7 +210,7 @@ public class BuyProductMethod {
                             tempVal5.getMode(),
                             !ConfigManager.configManager.getBoolean("placeholder.status.can-used-everywhere")),
                     "amount",
-                    String.valueOf(multi * tempVal2.getDisplayItemObject().getAmountPlaceholder()));
+                    String.valueOf(calculateAmount));
         }
         if (ConfigManager.configManager.getBoolean("log-transaction.enabled") && !UltimateShop.freeVersion) {
             String log = CommonUtil.modifyString(ConfigManager.configManager.getString("log-transaction.format"),
@@ -219,7 +220,7 @@ public class BuyProductMethod {
                     "shop-name", tempVal1.getShopDisplayName(),
                     "item", product,
                     "item-name", tempVal2.getDisplayName(player),
-                    "amount", String.valueOf(multi * tempVal2.getDisplayItemObject().getAmountPlaceholder()),
+                    "amount", String.valueOf(calculateAmount),
                     "price", ObjectPrices.getDisplayNameInLine(player,
                             multi,
                             takeResult.getResultMap(),
