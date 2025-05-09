@@ -1,6 +1,9 @@
 package cn.superiormc.ultimateshop.objects.menus;
 
 import cn.superiormc.ultimateshop.UltimateShop;
+import cn.superiormc.ultimateshop.gui.inv.CommonGUI;
+import cn.superiormc.ultimateshop.gui.inv.ShopGUI;
+import cn.superiormc.ultimateshop.managers.LanguageManager;
 import cn.superiormc.ultimateshop.objects.ObjectShop;
 import cn.superiormc.ultimateshop.objects.ObjectThingRun;
 import cn.superiormc.ultimateshop.objects.buttons.AbstractButton;
@@ -8,7 +11,11 @@ import cn.superiormc.ultimateshop.objects.buttons.ObjectButton;
 import cn.superiormc.ultimateshop.objects.buttons.ObjectItem;
 import cn.superiormc.ultimateshop.objects.items.ObjectAction;
 import cn.superiormc.ultimateshop.objects.items.ObjectCondition;
+import cn.superiormc.ultimateshop.utils.CommandUtil;
+import cn.superiormc.ultimateshop.utils.CommonUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.defaults.BukkitCommand;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -65,6 +72,9 @@ public class ObjectMenu {
         this.type = MenuType.Common;
         initMenu();
         initButtonItems();
+        if (!UltimateShop.freeVersion) {
+            initCustomCommand();
+        }
     }
 
     public MenuType getType() {
@@ -159,6 +169,27 @@ public class ObjectMenu {
                 }
                 menuItems.put(slot, buttonItems.get(String.valueOf(itemChar)));
             }
+        }
+    }
+
+    private void initCustomCommand() {
+        String commandName = menuConfigs.getString("custom-command.name");
+        if (commandName != null && !commandName.isEmpty()) {
+            ObjectMenu menu = this;
+            BukkitCommand command = new BukkitCommand(commandName) {
+                @Override
+                public boolean execute(CommandSender sender, String label, String[] args) {
+                    if (!(sender instanceof Player)) {
+                        LanguageManager.languageManager.sendStringText("error.in-game");
+                        return true;
+                    }
+                    CommonGUI.openGUI((Player) sender, fileName, false, false);
+                    return true;
+                }
+            };
+            command.setDescription(menu.getString("custom-command.description", "UltimateShop Custom Command for " + commandName));
+            CommandUtil.registerCustomCommand(command);
+            Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[UltimateShop] §fRegistered custom command for menu: " + fileName + ".");
         }
     }
 

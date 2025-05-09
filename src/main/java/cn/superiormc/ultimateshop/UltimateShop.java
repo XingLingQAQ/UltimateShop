@@ -48,7 +48,7 @@ public final class UltimateShop extends JavaPlugin {
             isFolia = true;
         }
         if (!UltimateShop.freeVersion) {
-            Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[UltimateShop] §fLoading PREMIUM version only features...");
+            Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[UltimateShop] §cPREMIUM version found, thanks for your support and we hope you have good experience with this plugin!");
         }
         new ErrorManager();
         new InitManager();

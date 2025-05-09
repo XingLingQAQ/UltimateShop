@@ -1,14 +1,22 @@
 package cn.superiormc.ultimateshop.objects;
 
+import cn.superiormc.ultimateshop.UltimateShop;
+import cn.superiormc.ultimateshop.gui.inv.ShopGUI;
 import cn.superiormc.ultimateshop.managers.ConfigManager;
 import cn.superiormc.ultimateshop.managers.ErrorManager;
+import cn.superiormc.ultimateshop.managers.LanguageManager;
 import cn.superiormc.ultimateshop.objects.buttons.AbstractButton;
 import cn.superiormc.ultimateshop.objects.buttons.ObjectButton;
 import cn.superiormc.ultimateshop.objects.buttons.ObjectCopyItem;
 import cn.superiormc.ultimateshop.objects.menus.ObjectMenu;
 import cn.superiormc.ultimateshop.objects.buttons.ObjectItem;
+import cn.superiormc.ultimateshop.utils.CommandUtil;
+import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.defaults.BukkitCommand;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -35,6 +43,9 @@ public class ObjectShop {
         this.config = config;
         initProducts();
         initButtonItems();
+        if (!UltimateShop.freeVersion) {
+            initCustomCommand();
+        }
     }
 
     private void initProducts() {
@@ -102,6 +113,27 @@ public class ObjectShop {
         }
         for (String button : tempVal1.getKeys(false)) {
             buttonItems.put(button, new ObjectButton(tempVal1.getConfigurationSection(button), this));
+        }
+    }
+
+    private void initCustomCommand() {
+        String commandName = config.getString("settings.custom-command.name");
+        if (commandName != null && !commandName.isEmpty()) {
+            ObjectShop shop = this;
+            BukkitCommand command = new BukkitCommand(commandName) {
+                @Override
+                public boolean execute(CommandSender sender, String label, String[] args) {
+                    if (!(sender instanceof Player)) {
+                        LanguageManager.languageManager.sendStringText("error.in-game");
+                        return true;
+                    }
+                    ShopGUI.openGUI((Player) sender, shop, false, false);
+                    return true;
+                }
+            };
+            command.setDescription(config.getString("settings.custom-command.description", "UltimateShop Custom Command for " + commandName));
+            CommandUtil.registerCustomCommand(command);
+            Bukkit.getConsoleSender().sendMessage("§x§9§8§F§B§9§8[UltimateShop] §fRegistered custom command for shop: " + shopName + ".");
         }
     }
 
