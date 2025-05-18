@@ -23,8 +23,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
+                    <source>14</source>
+                    <target>14</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -164,7 +164,6 @@
 
     <dependencies>
         <dependency>
-            <!-- To other developers: ManyouItems already built-in this project, so you can simply remove this dependency. -->
             <groupId>cn.superiormc</groupId>
             <artifactId>ManyouItems</artifactId>
             <version>1.0.0</version>

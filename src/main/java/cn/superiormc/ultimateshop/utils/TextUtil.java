@@ -6,6 +6,8 @@ import cn.superiormc.ultimateshop.methods.StaticPlaceholder;
 import cn.superiormc.ultimateshop.objects.items.subobjects.ObjectConditionalPlaceholder;
 import cn.superiormc.ultimateshop.objects.items.subobjects.ObjectRandomPlaceholder;
 import me.clip.placeholderapi.PlaceholderAPI;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.entity.Player;
 
 import java.math.BigDecimal;
@@ -13,6 +15,27 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TextUtil {
+
+    private static final MiniMessage MINI_MESSAGE = MiniMessage.miniMessage();
+
+    public static Component modernParse(String text) {
+        try {
+            return MINI_MESSAGE.deserialize(text);
+        } catch (Exception e) {
+            // 如果 MiniMessage 格式失败，退回兼容旧的 & 颜色代码
+            return Component.text(TextUtil.parse(text));
+        }
+    }
+
+    public static Component modernParse(String text, Player player) {
+        text = withPAPI(text, player);
+        try {
+            return MINI_MESSAGE.deserialize(text);
+        } catch (Exception e) {
+            // 如果 MiniMessage 格式失败，退回兼容旧的 & 颜色代码
+            return Component.text(TextUtil.parse(text));
+        }
+    }
 
     public static String parse(String text) {
         if (text == null)

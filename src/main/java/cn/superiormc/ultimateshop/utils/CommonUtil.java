@@ -220,7 +220,7 @@ public class CommonUtil {
 
     public static NamespacedKey parseNamespacedKey(String key) {
         String[] keySplit = key.split(":");
-        if (keySplit.length == 1) {
+        if (keySplit.length == 1 || CommonUtil.getMajorVersion(16)) {
             return NamespacedKey.minecraft(key.toLowerCase());
         }
         return NamespacedKey.fromString(key);
@@ -232,6 +232,20 @@ public class CommonUtil {
             return Color.fromRGB(Integer.parseInt(keySplit[0]), Integer.parseInt(keySplit[1]), Integer.parseInt(keySplit[2]));
         }
         return Color.fromRGB(Integer.parseInt(color));
+    }
+
+    public static List<Color> parseColorList(List<String> rawList) {
+        List<Color> colors = new ArrayList<>();
+
+        for (String value : rawList) {
+            try {
+                colors.add(parseColor(value));
+            } catch (Exception e) {
+                return colors;
+            }
+        }
+
+        return colors;
     }
 
     public static void giveOrDrop(Player player, ItemStack... item) {
