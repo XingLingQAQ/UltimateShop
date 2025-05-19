@@ -6,7 +6,10 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="UltimateShop" />
+        <module name="spigot" />
+        <module name="core" />
+        <module name="paper" />
+        <module name="plugin" />
       </profile>
     </annotationProcessing>
   </component>
